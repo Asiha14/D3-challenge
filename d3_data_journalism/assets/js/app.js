@@ -64,11 +64,7 @@ d3.csv("assets/data/data.csv").then(function(data){
 
 
 
-    //   chartGroup.selectAll("circle")
-    //   .data(data)
-    //   .enter()
-    //   .attr("x", d => xScale(d.poverty))
-    //   .attr("y", d => yLinearScale(d.healthcare))
+
     data.forEach(d=> console.log(d.abbr))
       chartGroup.selectAll(null)
       .data(data)

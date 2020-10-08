@@ -37,7 +37,7 @@
 
 .chart {
   display: block;
-  margin: 0;
+  margin: 100;
 }
 
 .d3-tip {
@@ -69,13 +69,6 @@
   }
 }
 
-.abbr{
-  text-anchor: middle;
-  font-size : 10px;
-  color:black;
-}
-
-.cir {
-  background-color: gray;
-
+svg{
+  margin-bottom: 50;
 }
