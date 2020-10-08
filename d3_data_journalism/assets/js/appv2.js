@@ -86,7 +86,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis,newYScale,chosenYAxi
   return circlesGroup;
 }
 
-function updateToolTip(data,chosenXAxis,chosenYAxis, circlesGroup) {
+function updateToolTip(chosenXAxis,chosenYAxis, circlesGroup) {
 
   var xlabel;
   var ylabel;
@@ -231,7 +231,7 @@ d3.csv("assets/data/data.csv").then(function(data){
     .attr("class", "aText")
     .text("Obese (%)");
 
-    var circlesGroup = updateToolTip(data, chosenXAxis,chosenYAxis, circlesGroup);
+    var circlesGroup = updateToolTip(chosenXAxis,chosenYAxis, circlesGroup);
 
     ylabels.selectAll("text")
     .on("click", function() {
@@ -297,7 +297,7 @@ d3.csv("assets/data/data.csv").then(function(data){
             .text(d => d.abbr)
             .attr("class", "stateText");
       // updates tooltips with new info
-      circlesGroup = updateToolTip(data, chosenXAxis, chosenYAxis, circlesGroup);
+      circlesGroup = updateToolTip(chosenXAxis, chosenYAxis, circlesGroup);
   
     })
     .on("mouseover", function() {
@@ -368,7 +368,7 @@ d3.csv("assets/data/data.csv").then(function(data){
       circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis,yLinearScale, chosenYAxis);
 
       // updates tooltips with new info
-      circlesGroup = updateToolTip(data, chosenXAxis,chosenYAxis, circlesGroup);
+      circlesGroup = updateToolTip(chosenXAxis,chosenYAxis, circlesGroup);
 
       abbr= chartGroup.selectAll(null)
       .data(data)
