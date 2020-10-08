@@ -1,5 +1,5 @@
 var svgWidth = 1000;
-var svgHeight = 500;
+var svgHeight = 560;
 
 var margin = {
   top: 50,
@@ -17,7 +17,8 @@ var svg = d3.select("#scatter")
   .attr("width", svgWidth);
 
 var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+  .attr("transform", `translate(${margin.left}, ${margin.top})`)
+  .attr("class", "chart");
 
 d3.csv("assets/data/data.csv").then(function(data){
     
@@ -29,7 +30,7 @@ d3.csv("assets/data/data.csv").then(function(data){
 
     console.log(data)
     // create scales
-    var xTimeScale = d3.scaleLinear()
+    var xScale = d3.scaleLinear()
       .domain(d3.extent(data, d => d.poverty))
       .range([0, width]);
 
@@ -38,7 +39,7 @@ d3.csv("assets/data/data.csv").then(function(data){
       .range([height, 0]);
 
     // create axes
-    var xAxis = d3.axisBottom(xTimeScale);
+    var xAxis = d3.axisBottom(xScale);
     var yAxis = d3.axisLeft(yLinearScale);
 
     // append axes
@@ -55,12 +56,38 @@ d3.csv("assets/data/data.csv").then(function(data){
       .data(data)
       .enter()
       .append("circle")
-      .attr("cx", d => xTimeScale(d.poverty))
+      .attr("cx", d => xScale(d.poverty))
       .attr("cy", d => yLinearScale(d.healthcare))
-      .attr("r", "10")
-      .attr("fill", "gold")
+      .attr("r", "15")
       .attr("stroke-width", "1")
-      .attr("stroke", "black");
+      .attr("class", "stateCircle")
+
+
+
+    //   chartGroup.selectAll("circle")
+    //   .data(data)
+    //   .enter()
+    //   .attr("x", d => xScale(d.poverty))
+    //   .attr("y", d => yLinearScale(d.healthcare))
+    data.forEach(d=> console.log(d.abbr))
+      chartGroup.selectAll(null)
+      .data(data)
+      .enter()
+      .append("text")
+      .attr("x", d => xScale(d.poverty))
+      .attr("y", d => yLinearScale(d.healthcare-.25))
+      .text(d => d.abbr)
+      .attr("class", "stateText");
+
+    
+      chartGroup.append("text")
+      .attr("transform", `translate(500, 500)`)
+      .attr("class", "aText")
+      .text("Poverty (%)");
+      chartGroup.append("text")
+      .attr("transform", `translate(-35, 200)rotate(270)`)
+      .attr("class", "aText")
+      .text("Lacks HealthCare (%)");
 
 
 });
