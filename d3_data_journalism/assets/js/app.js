@@ -1,3 +1,4 @@
+// Svg Set UP
 var svgWidth = 1000;
 var svgHeight = 560;
 
@@ -16,19 +17,21 @@ var svg = d3.select("#scatter")
   .attr("height", svgHeight)
   .attr("width", svgWidth);
 
+  // Add Chart Group
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`)
   .attr("class", "chart");
 
+  // reading in the data
 d3.csv("assets/data/data.csv").then(function(data){
     
-    
+    // Convert to float as opposed to strings
     data.forEach(function(d) {
         d.poverty = +d.poverty;
         d.healthcare = +d.healthcare;
     });
 
-    console.log(data)
+
     // create scales
     var xScale = d3.scaleLinear()
       .domain(d3.extent(data, d => d.poverty))
@@ -64,7 +67,7 @@ d3.csv("assets/data/data.csv").then(function(data){
 
 
 
-
+        // append state abbreviations
     data.forEach(d=> console.log(d.abbr))
       chartGroup.selectAll(null)
       .data(data)
@@ -75,7 +78,7 @@ d3.csv("assets/data/data.csv").then(function(data){
       .text(d => d.abbr)
       .attr("class", "stateText");
 
-    
+     //  x and y axes labels
       chartGroup.append("text")
       .attr("transform", `translate(500, 500)`)
       .attr("class", "aText")

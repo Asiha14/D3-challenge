@@ -1,3 +1,4 @@
+// Svg Set UP
 var svgWidth = 1000;
 var svgHeight = 700;
 
@@ -16,6 +17,7 @@ var svg = d3.select("#scatter")
   .attr("height", svgHeight)
   .attr("width", svgWidth);
 
+  // Add Chart Group
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`)
   .attr("class", "chart");
@@ -27,7 +29,7 @@ console.log(chosenXAxis)
 console.log(chosenYAxis)
 
 
-// function used for updating x-scale var upon click on axis label
+// function used for updating x and y scales var upon click on axis label
 function xScale(censusData, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
@@ -51,7 +53,7 @@ function yScale(censusData, chosenyAxis) {
   return yLinearScale;
 
 }
-// function used for updating xAxis var upon click on axis label
+// function used for updating  a and y Axes var upon click on axis label
 function renderXAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
   
@@ -86,6 +88,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis,newYScale,chosenYAxi
   return circlesGroup;
 }
 
+// function used for updating tooltips on circles
 function updateToolTip(chosenXAxis,chosenYAxis, circlesGroup) {
 
   var xlabel;
@@ -131,20 +134,22 @@ function updateToolTip(chosenXAxis,chosenYAxis, circlesGroup) {
   return circlesGroup;
 }
 
+// reading in the data
 d3.csv("assets/data/data.csv").then(function(data){
     
-    
-    data.forEach(function(d) {
-        d.poverty = +d.poverty;
-        d.healthcare = +d.healthcare;
-        d.age = +d.age;
-        d.smokes = +d.smokes;
-        d.obesity = +d.obesity;
-        d.income = +d.income;
-    });
+  // Convert to float as opposed to strings
+  data.forEach(function(d) {
+      d.poverty = +d.poverty;
+      d.healthcare = +d.healthcare;
+      d.age = +d.age;
+      d.smokes = +d.smokes;
+      d.obesity = +d.obesity;
+      d.income = +d.income;
+  });
 
-    var xLinearScale = xScale(data, "poverty");
-    var yLinearScale = yScale(data, "healthcare");
+  // Creating Initial Scales and  Axes
+  var xLinearScale = xScale(data, "poverty");
+  var yLinearScale = yScale(data, "healthcare");
 
   // Create initial axis functions
   var bottomAxis = d3.axisBottom(xLinearScale);
@@ -156,7 +161,6 @@ d3.csv("assets/data/data.csv").then(function(data){
       .call(bottomAxis);
 
   var yAxis = chartGroup.append("g")
-      
       .call(leftAxis);
 
 
@@ -171,10 +175,7 @@ d3.csv("assets/data/data.csv").then(function(data){
       .attr("stroke-width", "1")
       .attr("class", "stateCircle")
 
-
-
-
-
+    // append state abbreviations
     var abbr= chartGroup.selectAll(null)
       .data(data)
       .enter()
@@ -184,7 +185,7 @@ d3.csv("assets/data/data.csv").then(function(data){
       .text(d => d.abbr)
       .attr("class", "stateText");
 
-    
+    //  x and y axes labels
     var xlabels = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height+20})`)
 
@@ -231,11 +232,13 @@ d3.csv("assets/data/data.csv").then(function(data){
     .attr("class", "aText")
     .text("Obese (%)");
 
+    // Update the tooltip
     var circlesGroup = updateToolTip(chosenXAxis,chosenYAxis, circlesGroup);
 
+    // Manage change events
     ylabels.selectAll("text")
     .on("click", function() {
-      // get value of selection
+      // get value of selection and (de)activate text
       var value = d3.select(this).attr("value");
            
       if (value === "healthcare") {
@@ -274,19 +277,19 @@ d3.csv("assets/data/data.csv").then(function(data){
         .classed("active", true)
         .classed("inactive", false);
       }
-        console.log(value)
 
+      // remove old state circle labels
       abbr.remove();
       
         // functions here found above csv import
-        // updates x scale for new data
+        // updates yscale for new data
 
       yLinearScale = yScale(data, chosenYAxis);
 
-      // updates x axis with transition
+      // updates y axis with transition
       yAxis = renderYAxes(yLinearScale, yAxis);
 
-      // updates circles with new x values
+      // updates circles with new y values
       circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis,yLinearScale, chosenYAxis);
       abbr= chartGroup.selectAll(null)
             .data(data)
